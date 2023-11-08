@@ -1,24 +1,59 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
+  <title>Rope Connection</title>
 </head>
-
 <body>
-    <form id="form">
-        <label for="rope-lengths">Enter rope lengths:</label>
-        <input type="text" id="rope-lengths">
-        <button type="button" onclick="calculateMinCost()">Calculate</button>
-      </form>
-      <div id="result"></div>
+  <form id="ropeForm">
+    <label for="ropeLengths">Enter rope lengths (comma-separated):</label>
+    <input type="text" id="ropeLengths" name="ropeLengths">
+    <input type="submit" value="Submit">
+  </form>
+  <div id="result"></div>
 
-<script>
-    type="text/javascript" src="./script.js"
+  <script>
+    // Function to calculate the minimum cost to connect ropes
+    function minimumRopeCost(ropeLengths) {
+      // Convert the input string to an array of integers
+      const lengths = ropeLengths.split(',').map(Number);
 
+      // Sort the rope lengths in ascending order
+      lengths.sort((a, b) => a - b);
+
+      let cost = 0;
+
+      // Connect ropes until there's only one left
+      while (lengths.length > 1) {
+        // Extract the two smallest rope lengths
+        const min1 = lengths.shift();
+        const min2 = lengths.shift();
+        
+        // Calculate the cost of connecting these two ropes
+        const currentCost = min1 + min2;
+        
+        // Add the cost to the total cost
+        cost += currentCost;
+        
+        // Insert the newly created rope back into the sorted array
+        lengths.push(currentCost);
+
+        // Re-sort the array to maintain ascending order
+        lengths.sort((a, b) => a - b);
+      }
+
+      return cost;
+    }
+
+    const ropeForm = document.getElementById('ropeForm');
+    const resultDiv = document.getElementById('result');
+
+    ropeForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const ropeLengths = ropeForm.ropeLengths.value;
+      const minCost = minimumRopeCost(ropeLengths);
+      resultDiv.textContent = 'Minimum cost to connect ropes: ' + minCost;
+    });
   </script>
-  
-
 </body>
-
 </html>
+
